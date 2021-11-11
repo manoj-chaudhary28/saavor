@@ -1,0 +1,188 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenOrdersReportVm>
+@{
+    ViewData["Title"] = "Order Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--   Big container   -->
+<div class="container-fluid">
+
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12 start-end-date--filters">
+            @using (Html.BeginForm("order", "report"))
+            {
+            <div class="row mb-5">
+                <div class="col-12 col-md-6 col-lg-4 col-xl-4">
+                    <div id="dbStart" class="input-group date mr-3 mb-2 reports--date float-left" data-date-format="mm-dd-yyyy">
+                        <input id="searchDate" class="form-control" type="text" value="@TempData["startDate"]" name="fromdate" readonly />
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 col-xl-4">
+                    <div id="dbEnd" class="input-group date mb-2 reports--date float-left" data-date-format="mm-dd-yyyy">
+                        <input id="endDate" class="form-control" type="text" value="@TempData["endDate"]" name="toDate" readonly />
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 col-xl-4 text-right pr-0"><input type="submit" id="btnSearch" class="float-left_ color-theme export--report" value="Search" /></div>
+            </div>
+            @*<button class="btn color-theme color-white hide" type="submit" id="button-search_orders"></button>*@
+            }
+
+            <div class="table-responsive mt-5 pb-4 bg-white">
+                <span class="float-left mt-3 mb-3 pl-3">
+                    <span class="report-date-periods roboto-bold" id="selectedFilters">@TempData["SelectedFilter"]</span>
+                </span>
+                <input type="button" id="btnExport" class="float-right color-theme export--report mt-3 mb-3" value="Export">
+                <table class="table table-bordered manage_report--table" id="dataTable_" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="10%">Order ID</th>
+                            <th width="15%">Delivery/Pickup Date</th>
+                            <th width="25%">Name & Address</th>
+                            <th width="43%">Dishes Ordered & Customization</th>
+                            <th width="5%">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                        var i = 1;
+                        }
+                        @if (Model != null && Model.Count > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+
+                            <td data-title="Order ID">@item.OrderId </td>
+                            <td data-title="Delivery/Pickup Date">
+                                <span>@item.OrderStatus</span>
+                                <span>@item.OrderDate</span>
+                            </td>
+                            <td data-title="Name & Address">
+                                <span>@item.UserName</span>
+                                <span>@item.AddressLine</span>
+                            </td>
+
+                            @if (item.OrderDishes != null && item.OrderDishes.Count > 0)
+                                {
+                            <td data-title="Dishes Ordered & Customization">
+                                @foreach (var dishe in item.OrderDishes)
+                                        {
+                                <span>
+                                    &#9679;
+                                    @dishe.DishName
+                                </span>
+                                        }
+                            </td>
+                            <td data-title="Quantity">
+
+                                @foreach (var dishe in item.OrderDishes)
+                                        {
+                                <span>@dishe.Quantity</span>
+                                        }
+                            </td>
+                                }
+                                else
+                                {
+                            <td data-title="Dishes Ordered & Customization"></td>
+                            <td data-title="Quantity"></td>
+                                }
+
+
+
+                        </tr>
+                            i++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">No order found!</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="export" class="hide"></div>
+<div id="editor"></div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link href="~/css/datepicker.css" rel="stylesheet" />
+    <script src="~/js/sources/bootstrap_v3.2.0.min.js"></script>
+    <script src="~/js/sources/bootstrap-datepicker_1.3.0.js"></script>
+    <script src="~/js/sources/jspdf_1.5.3.min.js"></script>
+    <script src="~/js/sources/jspdf.plugin.autotable_v3.5.6.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#dbStart,#dbEnd").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+            }); 
+
+            $(".input-group-addon").click();
+            var object = $(".datepicker ");
+            if ($(object).length > 0) {
+                $(object).remove();
+            }
+
+            //$("#btnSearch").click(function () {
+            //    $("#selectedFilters").text("From " + $("#searchDate").val() + " to " + $("#endDate").val())
+            //});
+        });
+        //$("#dbStart").datepicker().on("changeDate", function (e) {
+        //    setTimeout(function () {
+        //        $("#button-search_orders").click();
+        //    }, 300);
+        //});
+
+        $("body").on("click", "#btnExport", function () {
+            showLoading()
+            $.ajax({
+                type: "POST",
+                url: "/Report/GetExportOrders",
+                data: { fromDate: $("#searchDate").val(), toDate: $("#endDate").val() },
+                dataType: "html",
+                success: function (data) {
+                    $("#export").html(data);
+                    setTimeout(function () {
+                        var header = "Saavor - " + $(".header--kitchen_name").text() + " - " + $("#searchDate").val() + " to " + $("#endDate").val();
+                        var fileName = "Order-" + $(".header--kitchen_name").text().replace(/ /g, "_") + "-" + $("#searchDate").val() + ".pdf"
+                        generatePDF(header, fileName,"dataTableExportToPdf");
+                        hideLoading()
+                    }, 300);
+                },
+                failure: function (response) {
+                    hideLoading()
+                },
+                error: function (response) {                    
+                    hideLoading()
+                }
+            });
+
+
+        });
+        function showLoading() {
+            $(".loading_container_overlay,.loader_container").addClass("show").removeClass("hide");
+        }
+        function hideLoading() {
+            $(".loading_container_overlay,.loader_container").addClass("hide").removeClass("show");
+        }
+    </script>
+}

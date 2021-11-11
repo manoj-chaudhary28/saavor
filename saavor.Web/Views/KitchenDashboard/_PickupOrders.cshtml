@@ -1,0 +1,87 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenOrdersVm>
+<table class="table table-bordered manage_order--table custom-responsive_grid" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" class="kitchen-request" id="header-checkbox" />
+                <label class="grid-checl_label" for="header-checkbox"></label>
+            </th>
+            <th width="8%">Order ID</th>
+            <th width="13%">Order Date</th>
+            <th width="15%">User Name</th>
+            <th width="15%">User Email</th>
+            <th>Order Detail</th>
+            <th>Quantity</th>
+            <th width="14%">Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var i = 1;
+        }
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                <input type="checkbox" class="select-item" id="@item.FoodOrderId" />
+                <label class="grid-checl_label" for="@item.FoodOrderId"></label>
+            </td>
+            <td data-title="Order ID">
+                @item.OrderId
+                <input type="hidden" value="@item.FoodOrderId" />
+            </td>
+            <td data-title="Order Date">@item.OrderDate</td>
+            <td data-title="User Name">
+                @item.UserName
+                @if (item.OrderStatus == "Arrived")
+                {
+                    <span class="btn-dark w-100 user-arrived">Customer Arrived</span>
+                }
+            </td>
+            <td data-title="User Email">@item.UserEmail</td>
+            @if (item.OrderDishes != null && item.OrderDishes.Count > 0)
+            {
+                <td data-title="Order Detail">
+                    @foreach (var dishe in item.OrderDishes)
+                    {
+                        <span class="order--dishes">
+                            &#9679;
+                            @dishe.DishName
+                        </span>
+                    }
+                </td>
+                <td data-title="Quantity">
+
+                    @foreach (var dishe in item.OrderDishes)
+                    {
+                        <span class="order--dishes">@dishe.Quantity</span>
+                    }
+                </td>
+            }
+            else
+            {
+                <td data-title="Order Detail"></td>
+                <td data-title="Quantity"></td>
+            }
+        <td width="14%" data-title="Action">
+            <span class="delivered cursor-pointer" style="width: 85px; margin-bottom: 10px" data="@item.FoodOrderId" onclick="onUpdateStatus(this)">Completed</span> 
+            <span class="material-icons grid-print-icon grid-receipt-print cursor-pointer" title="print" data="@item.FoodOrderId" onclick="onGetOrderInformation(this)">
+                print
+            </span>
+        </td>
+        </tr>
+                i++;
+            }
+
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">No order found!</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,99 @@
+﻿@model List<saavor.Shared.ViewModel.MessageVm>
+@{
+    ViewData["Title"] = "Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<style>
+    .modal {z-index: 999999999 !important}
+    .modal-content {width: 100% !important;}
+    .user_review-img img {width: 100%;height: auto}
+    .user_review--feedback .review, .date--review {font-family: "Roboto Regular" !important;font-size: 13px;line-height: 25px;}
+    .btn-reply {border: 1px solid #000;background: #000;color: #fff;}
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12 text-right add_new--account">
+            <a asp-action="message" asp-controller="message">New Message</a>
+        </div>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("messages", "message"))
+            {
+                <div class="grid-search bg-white">
+                    <div class="input-group">
+                        <input id="search" type="text" class="form-control roboto-regular font-size-14" name="search" value="@ViewData["CurrentFilter"]" placeholder="Search by subject, message">
+                        <div class="input-group-append">
+                            <button class="btn color-theme color-white" type="submit" id="button-search_kitchen">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="table-responsive mt-4 pb-4 bg-white">
+                <table class="table table-bordered manage_order--table" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="8%">Sr.No</th>
+                            <th width="30%">Subject</th>
+                            <th width="40%">Message</th>
+                            <th width="10%">Date</th>
+                            <th width="12%">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var i = 1;
+                        }
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td data-title="Sr.No">@i</td>
+                                    <td data-title="Subject">@item.Subject</td>
+                                    <td data-title="Message">@item.Message</td>
+                                    <td data-title="Date">@item.CreateDate</td>
+                                    <td data-title="Action">
+                                        <a href="/message?m=@item.MessageId" class="text-decoration-none">Edit</a>
+                                        | <a href="javascript:void(0)" data="@item.MessageId" class="delete--action" title="delete">Delete</a>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">No messages found!</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/bootstrap-confirm-delete.js"></script>
+    <script src="~/js/manage_message.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Message.Init();
+        });
+    </script>
+}

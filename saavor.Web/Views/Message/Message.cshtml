@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .card {margin: 0 auto;float: none;margin-bottom: 10px;}
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row " style="margin-top: 50px">
+        <div class="col-12">
+            <div class="card w-50 cW100">
+                <div class="card-body">
+                    <form id="form-message" name="form-message">                       
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="comments">
+                                    Subject
+                                </label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="comments">
+                                    Message
+                                </label>
+                                <textarea class="form-control summernote" type="textarea" name="message" id="message" placeholder="" maxlength="6000" rows="7"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <input type="button" id="messagePost" class="message-post" name="post" value="Post">
+                                or
+                                <a asp-action="messages" asp-controller="message">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}     
+    <script src="~/js/bootstrap-confirm-delete.js"></script>
+    <script src="~/js/manage_message.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Message.Init();            
+        });
+    </script>
+}
+

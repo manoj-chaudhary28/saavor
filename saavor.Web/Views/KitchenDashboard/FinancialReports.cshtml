@@ -1,0 +1,171 @@
+﻿@model List<saavor.Shared.ViewModel.FinancialReportVm>
+@{
+    ViewData["Title"] = "Financial Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--   Big container   -->
+<div class="container-fluid">
+
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("financialreports", "kitchendashboard"))
+            {
+               
+                <input type="submit" id="btnSearch" class="float-right color-theme export--report" value="Search" />
+                <div id="datepickerStart" class="input-group date  mb-4 ml-4 reports--date" data-date-format="mm-dd-yyyy" style="width:200px">
+                    <input id="searchDate" class="form-control reports--datepicker bg-dark" value="@TempData["toDate"]" name="toDate" value="End Date" type="text" readonly style="border-color: #343a40" />
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <span class="material-icons material-icon--date">
+                            calendar_today
+                        </span>
+                    </span>
+                </div>
+                <div id="datepicker" class="input-group date  mb-4 reports--date" data-date-format="mm-dd-yyyy" style="width:200px">
+                    <input id="searchDate" class="form-control reports--datepicker bg-dark" value="@TempData["fromDate"]" name="fromDate" value="Start Date" type="text" readonly style="border-color: #343a40" />
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <span class="material-icons material-icon--date">
+                            calendar_today
+                        </span>
+                    </span>
+                </div>
+                <button class="btn color-theme color-white hide" type="submit" id="button-search_orders">
+                </button>
+
+            }
+
+        <div class="table-responsive mt-5 pb-4 bg-white">
+            <input type="button" id="btnExport" class="float-left color-theme export--report" value="Export" />
+            <table class="table table-bordered manage_report--table" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Month</th>
+                        <th>Order Amount($)</th>
+                        <th>Discount($)</th>
+                        <th>Sales Tax($)</th>
+                        <th>Service Charges($)</th>
+                        <th>Delivery Fee($)</th>
+                        <th>Tip Amount($)</th>
+                        <th>Total Amount($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+                        var i = 1;
+                    }
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            if (Model.Count == i)
+                            {
+                                <tr>
+                                    <td><b>Total</b></td>
+                                    <td> </td>
+                                    <td><b>@item.OrderAmount</b></td>
+                                    <td><b>@item.Discount</b></td>
+                                    <td><b>@item.SalesTax</b></td>
+                                    <td><b>@item.ServiceCharge</b></td>
+                                    <td><b>@item.DeliveryFee</b></td>
+                                    <td><b>@item.TipAmount</b></td>
+                                    <td><b>@item.TotalAmount</b></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.OrderDate</td>
+                                    <td>@item.OrderAmount</td>
+                                    <td>@item.Discount</td>
+                                    <td>@item.SalesTax</td>
+                                    <td>@item.ServiceCharge</td>
+                                    <td>@item.DeliveryFee</td>
+                                    <td>@item.TipAmount</td>
+                                    <td>@item.TotalAmount</td>
+                                </tr>
+                            }
+                            i++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">No record found!</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+        </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="export" class="hide"></div>
+<div id="editor"></div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/sources/bootstrap_v3.2.0.min.js"></script>
+    <script src="~/js/sources/bootstrap-datepicker_1.3.0.js"></script>
+    @*<script src="~/js/sources/jspdf_1.5.3.min.js"></script>
+        <script src="~/js/sources/jspdf.plugin.autotable_v3.5.6.min.js"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script>
+
+        $(function () {
+            $("#datepicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                autoclose: true,
+            });
+            $("#datepickerStart").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                autoclose: true,
+            });
+
+        });
+        //$("#datepicker").datepicker().on("changeDate", function (e) {
+        //    setTimeout(function () {
+        //        $("#button-search_orders").click();
+        //    }, 300);
+        //});
+
+        $("body").on("click", "#btnExport", function () {
+           
+            html2canvas($('#dataTable')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download($(".header--kitchen_name").text().replace(/ /g, "_") + ".pdf");
+                    
+                }
+            });
+
+        });
+      
+        
+    </script>
+}

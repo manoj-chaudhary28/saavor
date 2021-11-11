@@ -1,0 +1,199 @@
+﻿@model saavor.Shared.ViewModel.KitchenVm
+@{
+    ViewData["Title"] = "Kitchen Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("overview", "kitchen"))
+            {
+                <div class="grid-search bg-white">
+                    <div class="input-group">
+                        <input id="search" type="text" class="form-control roboto-regular font-size-14" maxlength="10" name="search" value="@ViewData["CurrentFilter"]" placeholder="Search by Kitchen ID">
+                        <div class="input-group-append">
+                            <button class="btn color-theme color-white" type="submit" id="button-search_kitchen">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        <div class="table-responsive mt-4 pb-4 bg-white">
+            <span class="text-right add_new--account back_to_home"><a asp-action="home" asp-controller="dashboard">Back to Home</a></span>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th> </th>
+                        <th>Kitchen ID</th>
+                        <th>Kitchen Name</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var i = 1;
+                    }
+                    @if (Model != null && Model.Kitchen != null && Model.Kitchen.Count > 0)
+                    {
+                        @foreach (var item in Model.Kitchen)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.RequestId > 0)
+                                    {
+                                        <input type="checkbox" checked="checked" class="kitchen-request" id="@item.ProfileId" />
+                                        <label class="grid-checl_label" for="@item.ProfileId"></label>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="kitchen-request" id="@item.ProfileId" />
+                                        <label class="grid-checl_label" for="@item.ProfileId"></label>
+                                    }
+
+                                </td>
+                                <td>@item.KitchenId</td>
+                                <td>@item.KitchenName</td>
+                                <td>@item.KitchenAddress</td>
+
+                            </tr>
+                            i++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">No kitchen found!</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @*@{
+            var prevDisabled = Model.Kitchen != null ? !Model.Kitchen.HasPreviousPage ? "disabled" : "" : "";
+            var nextDisabled = Model.Kitchen != null ? !Model.Kitchen.HasNextPage ? "disabled" : "" :"";
+        }*@
+
+            @*<div class="table-pagination float-right">
+
+            <form asp-action="overview"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]" id="form-page_size" class="float-left mt-1 mr-3">
+                <select name="pageSize" asp-for="@ViewData["CurrentPageSize"]" onchange="onChangePageSize()">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </form>
+
+            <a asp-action="overview"
+               asp-route-pageNumber="@(Model.Kitchen != null ? Model.Kitchen.PageIndex - 1 : 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-pageSize="@ViewData["CurrentPageSize"]"
+               class="btn btn-default color-theme border-round @prevDisabled">
+                <i class='fas fa-angle-left'></i>
+            </a>
+            <a asp-action="overview"
+               asp-route-pageNumber="@(Model.Kitchen != null ? Model.Kitchen.PageIndex + 1 : 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-pageSize="@ViewData["CurrentPageSize"]"
+               class="btn btn-default color-theme border-round @nextDisabled">
+                <i class='fas fa-angle-right'></i>
+            </a>
+        </div>*@
+            <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+        </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+   
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".kitchen-request").click(function () {
+                showLoading();
+                var isChecked = "0";
+                if ($(this).is(":checked")) {
+                    isChecked = "1"
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/Kitchen/RequestToKitchen",
+                    data: { kitchenId: $(this).attr("id"), isChecked: isChecked },
+                    dataType: "json",
+                    success: function (response) {
+                        hideLoading()     
+                        if (isChecked == "1")
+                        {
+                            toastr.success("Kitchen/s Sent for Approval!");
+                        }
+                        else
+                        {
+                            toastr.success("Kitchen/s Removed Successfully!");
+                        }
+                    },
+                    failure: function (response) { hideLoading() },
+                    error: function (response) { hideLoading() }
+                });
+            });
+            $("#search").keypress(function (e) {
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    return false;
+                }
+            });
+
+            $("#search").autocomplete({
+                source: function (request, response) {
+                    showLoading();
+                    $.ajax({
+                        url: "/Kitchen/AutoCompleteKitchen",
+                        type: "POST",
+                        dataType: "json",
+                        data: { kitchenId: request.term },
+                        success: function (data) {
+                            hideLoading();
+                            response($.map(data.result, function (item) {
+                                return { label: item.kitchenId + " - " + item.kitchenName, value: item.kitchenId };
+                            }));
+                           
+                        }
+                    })
+                },
+                change: function () {
+                },
+                select: function (event, ui) {
+                    showLoading();
+                    setTimeout(function () {
+                        $("#button-search_kitchen").click();
+                    }, 300);
+                }
+            });  
+        });
+        function showLoading() {
+            $(".loading_container_overlay,.loader_container").addClass("show").removeClass("hide");
+        }
+        function hideLoading() {
+            $(".loading_container_overlay,.loader_container").addClass("hide").removeClass("show");
+        }
+        function onChangePageSize() {
+            showLoading();
+            $("#form-page_size").submit();
+        }
+    </script>
+}

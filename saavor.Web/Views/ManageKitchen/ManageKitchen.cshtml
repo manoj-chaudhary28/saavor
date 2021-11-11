@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Manage kitchen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .card {
+        margin: 0 auto;
+        float: none;
+        margin-bottom: 10px;
+    }
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row " style="margin-top: 50px;margin-bottom: 50px">
+        <div class="col-12">
+            <div class="card w-50 cW100">
+                <div class="card-body">
+                    <form id="form-message" name="form-message">
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="Cuisines">
+                                    Cuisines
+                                </label>
+                                <input type="text" class="form-control" id="subject" name="subject">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Menu
+                                </label>
+                                <input type="text" class="form-control" id="menu" name="menu">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Day/Time
+                                </label>
+                                <input type="text" class="form-control" id="menu" name="menu">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Delivery Details
+                                </label>
+                                <input type="text" class="form-control" id="menu" name="menu">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Pickup
+                                </label>
+                                <br>
+                                <input type="radio" id="rdoPickupYes" name="Pickup" value="Yes">
+                                <label for="rdoPickupYes">Yes</label>
+                                <input type="radio" id="rdoPickupNo" name="Pickup" value="No">
+                                <label for="rdoPickupNo">No</label><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Display Calories
+                                </label>
+                                <br>
+                                <input type="radio" id="rdoDCYes" name="DisplayCalories" value="Yes">
+                                <label for="age1">Yes</label>
+                                <input type="radio" id="rdoDCNo" name="DisplayCalories" value="No">
+                                <label for="rdoDCNo">No</label><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Kitchen's visibility range
+                                </label>
+                                <br />
+                                @*<input type="text" class="form-control" id="menu" name="menu">*@
+                                <input class="simple-slider" type="hidden" value="25" /><br>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label for="menu">
+                                    Mininum hours required
+                                </label>
+                                <input type="text" class="form-control" id="menu" name="menu">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+  
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}  
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.simple-slider').jRange({
+                from: 1,
+                to: 50,
+                step: 1,
+                scale: [1, 50],
+                format: '%s',
+                width: 300,
+                showLabels: true
+            });
+        });
+    </script>
+}
+

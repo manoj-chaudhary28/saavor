@@ -1,0 +1,91 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenUsersVm>
+@{
+    ViewData["Title"] = "Manage users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/application.js"></script>
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("manageusers", "kitchendashboard"))
+            {
+                <div class="grid-search bg-white">
+                    <div class="input-group">
+                        <input id="search" type="text" class="form-control roboto-regular font-size-14" name="search" value="@ViewData["CurrentFilter"]" placeholder="Search by name, email, mobile no">
+                        <div class="input-group-append">
+                            <button class="btn color-theme color-white" type="submit" id="button-search_kitchen">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="table-responsive mt-4 pb-4 bg-white">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>MobileNo</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Reg.Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var i = 1;
+                        }
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td data-title="Name">@item.FirstName @item.LastName </td>
+                                    <td data-title="Email">@item.Email</td>
+                                    <td data-title="MobileNo">@item.MobileNo</td>
+                                    <td data-title="City">@item.CityName</td>
+                                    <td data-title="State">@item.StateName</td>
+                                    <td data-title="Reg.Date">@item.CreateDate</td>
+                                    <td data-title="Status">
+                                        <span class="manage_users--@item.Status">@item.Status</span>
+                                    </td>
+                                    <td data-title="Action"><i class="fa fa-info-circle cursor-pointer" aria-hidden="true" onclick="onLoadKitchenUserInformation(@item.UserId)"></i></td>
+                                </tr>
+                                i++;
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">No user found!</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div id="managerUserInformation" class="modal">
+    <div class="modal-content animate">
+        <div class="container cont_manager_user--infor">
+        </div>
+    </div>
+</div>
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>

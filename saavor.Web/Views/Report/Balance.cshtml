@@ -1,0 +1,139 @@
+﻿@model List<saavor.Shared.ViewModel.ManageBalanceKitchenVm>
+@{
+    ViewData["Title"] = "Manage Balance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<style>
+    .modal {
+        z-index: 999999999 !important;
+    }
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12 start-end-date--filters">
+            @using (Html.BeginForm("balance", "report"))
+            {
+                <div id="dbStart" class="input-group date mr-3 mb-4 reports--date float-left" data-date-format="mm-dd-yyyy">
+                    <input class="form-control" type="text" value="@TempData["fromDate"]" name="fromDate" readonly />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div id="dbEnd" class="input-group date  mb-4 reports--date float-left" data-date-format="mm-dd-yyyy">
+                    <input class="form-control" type="text" value="@TempData["toDate"]" name="toDate" readonly />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input type="submit" id="btnSearch" class="float-left color-theme export--report" value="Search" />
+
+            }
+
+            <div class="table-responsive mt-5 pb-4 bg-white">
+                <table class="table table-bordered manage_report--table" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Month - Year</th>
+                            <th>Total no of transaction</th>
+                            <th>Saavor charges(per transaction)</th>
+                            <th>Total amount</th>
+                            <th>Invoice</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+                            var i = 1;
+                        }
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                if (Model.Count == i)
+                                {
+                                    <tr>
+                                        <td><b>Total</b></td>
+                                        <td></td>
+                                        <td data-title="Total no of transaction"><b>@item.TotalTransaction</b></td>
+                                        <td data-title="Saavor charges(per transaction)"><b>@item.ServiceCharge</b></td>
+                                        <td data-title="Total amount"><b>@item.TotalAmount</b></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td data-title="Sr.No">@i</td>
+                                        <td data-title="Month - Year">@item.FormatedDate</td>
+                                        <td data-title="Total no of transaction">@item.TotalTransaction</td>
+                                        <td data-title="Saavor charges(per transaction)">@item.ServiceCharge</td>
+                                        <td data-title="Total amount">@item.TotalAmount</td>
+                                        <td data-title="Invoice"><i class="fa fa-info-circle cursor-pointer balance-invoice" data="@item.CreateDate" aria-hidden="true"></i></td>
+                                    </tr>
+                                }
+                                i++;
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">No record found!</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+    @*<div class="row mt-4 mb-4">
+        <div class="col-sm-12 text-center">
+            <input type="submit" id="btnMakePayment" class="color-theme export--report" value="Make Payment" />
+        </div>
+    </div>*@
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="balanceInvoice" class="modal">
+    <div class="modal-content animate">
+        <div class="container invoice--info">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />*@
+
+    <link href="~/css/datepicker.css" rel="stylesheet" />
+    <script src="~/js/sources/bootstrap_v3.2.0.min.js"></script>
+    <script src="~/js/sources/bootstrap-datepicker_1.3.0.js"></script>
+    <script src="~/js/application/jquery.ManageBalance.js"></script>
+    <script>
+        $(function () {
+            $("#dbStart,#dbEnd").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months",
+                autoclose: true,
+            });
+            $(".input-group-addon").click();
+            var object = $(".datepicker ");
+            if ($(object).length > 0) {
+                $(object).remove();
+            }
+        });
+
+    </script>
+}

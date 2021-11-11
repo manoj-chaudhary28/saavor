@@ -1,0 +1,93 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenOrdersReportVm>
+ 
+<div class="container-fluid">
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            <div class="table-responsive mt-5 pb-4 bg-white">
+                <table class="table table-bordered manage_report--table" id="dataTableExportToPdf" width="100%" cellspacing="0">
+
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Delivery/Pickup Date</th>
+                        <th>Name & Address</th>
+                        <th>Dishes Ordered & Customization</th>
+                        <th>Quantity</th>
+                    </tr>
+                    @{
+                        var i = 0;
+                        var j = 0;
+                    }
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>@item.OrderId </td>
+                                <td>
+                                    <span>@item.OrderStatus</span><br>
+                                    <span>@item.OrderDate</span>
+                                </td>
+                                <td>
+                                    <span>@item.UserName</span><br>
+                                    <span>@item.AddressLine</span>
+                                </td>
+
+                                @if (item.OrderDishes != null && item.OrderDishes.Count > 0)
+                                {
+                            <td>
+                                @foreach (var dishe in item.OrderDishes)
+                                {
+                                    if (i == 0)
+                                    {
+                                        <span> @dishe.DishName</span>
+                                    }
+                                    else
+                                    {
+                                        <br><br> <span> @dishe.DishName</span>
+                                    }
+
+                                    i++;
+                                }
+                            </td>
+                            <td>
+
+                                @foreach (var dishe in item.OrderDishes)
+                                {
+                                    if (j == 0)
+                                    {
+                                        <span>@dishe.Quantity</span>
+                                    }
+                                    else
+                                    {
+                                        <br><br> <span>@dishe.Quantity</span>
+                                    }
+
+                                    j++;
+                                }
+                            </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                    <td></td>
+                                }
+                            </tr>
+                            i = 0;
+                            j = 0;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">No order found!</td>
+                        </tr>
+                    }
+             
+                </table>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+ 

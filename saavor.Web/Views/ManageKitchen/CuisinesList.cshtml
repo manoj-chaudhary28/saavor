@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewData["Title"] = "Cuisines";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<style>
+    .modal {
+        z-index: 999999999 !important;
+    }
+</style>
+<style>
+    .card {
+        margin: 0 auto;
+        float: none;
+        margin-bottom: 10px;
+    }
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row " style="margin-top: 50px;margin-bottom: 50px">
+        <div class="col-12">
+            <div class="card w-50 cW100">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <span class="material-icons float-left color-black">west</span>
+                        </div>
+                        <div class="col-sm-4 form-group text-center">
+                            <span class="float-left w-100 cuisines_title_name">Cuisines</span>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <span class="material-icons float-right color-black">add</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+
+                            <div class="form-group has-search">
+                                <span class="fa fa-search form-control-feedback"></span>
+                                <input type="text" class="form-control" id="cuisinessearch" name="cuisinessearch" placeholder="Type to seach for a Cuisine">
+                            </div>
+                            @*<div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search...">
+                                    <button type="button" class="btn bg-transparent" style="margin-left: -40px; z-index: 100;">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <div class="table-responsive pb-4 bg-white">
+                                <table class="table table-bordered pb-4" id="cuisinesDataTable" width="100%" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">American</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Asian</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Bakery</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Chinese</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Cuban</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Indain</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Italian</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="balanceInvoice" class="modal">
+    <div class="modal-content animate w-25">
+        <div class="container invoice--info">
+            <div>
+                <div class="row">
+                    <div class="col-12 text-center font-weight-600"> Add Cuisine </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-12 text-center"> Enter name of a cuisine </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-12">  <input type="text" class="form-control" id="cuisineName" name="cuisineName" placeholder="Cuisine Type(eg. American, Italian, Indian etc)"> </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-sm-12 ">
+                        <input type="button" id="cuisineSave" class="message-post" name="Save" value="Save">
+                        or
+                        <a asp-action="messages" asp-controller="message">Cancel</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+

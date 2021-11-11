@@ -1,0 +1,174 @@
+﻿@model saavor.Shared.ViewModel.FinancialVm
+<table class="table table-bordered manage_report--table" id="dataTable_" width="100%" cellspacing="0">
+
+    <tr>
+        @*<th width="85px">Period</th>
+        <th width="110px">KitchenId</th>
+        <th width="140px">Number of Orders</th>
+        <th width="108px">Discount from Kitchen($)</th>
+        <th width="108px">Discount from Saavor($)</th>
+        <th width="108px">SubTotal($)</th>
+        <th width="110px">Sales Tax($)</th>
+        <th width="125px">Delivery Fee($)</th>
+        <th width="125px">Tip Amount($)</th>
+        <th width="155px">Total Order Amount($)</th>
+        <th width="155px">Saavor Charges($)</th>
+        <th width="122px">Stripe Fees($)</th>
+        <th width="130px">Amount to Customer($)</th>*@
+
+        <th style="width:155px;">Period</th>
+        <th style="width:155px;">KitchenId</th>
+        <th style="width:129px;">Number of Orders</th>
+        <th style="width:138px;">Discount from Kitchen($)</th>
+        <th style="width:132px;">Discount from Saavor($)</th>
+        <th style="width:148px;">SubTotal($)</th>
+        <th style="width:104px;">Sales Tax($)</th>
+        <th style="width:124px;">Delivery Fee($)</th>
+        <th style="width:147px;">Tip Amount($)</th>
+        <th style="width:157px;">Total Order Amount($)</th>
+        <th style="width:162px;">Saavor Charges($)</th>
+        <th style="width:135px;">Stripe Fees($)</th>
+        <th style="width:145px;">Amount to Customer($)</th>
+    </tr>
+    @{
+        var i = 1;
+    }
+    @if (Model != null && Model.MonthYearList != null && Model.Data != null && Model.MonthYearList.Count > 0 && Model.Data.Count > 0)
+    {
+        @foreach (var item in Model.MonthYearList)
+        {
+<tr>
+
+    <td style="width:125px;word-break:break-all"> 
+
+    @if (!string.IsNullOrEmpty(item.OrderDate))
+    {
+        <span>@item.OrderDate</span>
+    }
+    else
+    {
+        <b>Total</b>
+    }
+    </td>
+    <td colspan="12" style="padding:0">
+        @{
+            var report = Model.Data.Where(x => x.OrderDate == item.OrderDate).ToList();
+        }
+        @if (report != null && report.Count > 0)
+        {
+            <table width="100%">
+                @foreach (var row in report)
+                {
+                    if (Model.MonthYearList.Count == i)
+                    {
+                <tr>
+                    @*<td style="width:128px;word-break:break-all">-</td>
+        <td style="width:159px;word-break:break-all"><b>@row.NumberOfOrders</b></td>
+        <td style="width:121px;word-break:break-all"><b>@row.Discount</b></td>
+        <td style="width:120px;word-break:break-all"><b>@row.SaavorDiscount</b></td>
+        <td style="width:120px;word-break:break-all"><b>@row.SubTotal</b></td>
+        <td style="width:124px;word-break:break-all"><b>@row.SalesTax</b></td>
+        <td style="width:145px;word-break:break-all"><b>@row.DeliveryFee</b></td>
+        <td style="width:141px;word-break:break-all"><b>@row.TipAmount</b></td>
+        <td style="width:141px;word-break:break-all"><b>@row.TotalAmount</b></td>
+        <td style="width:178px;word-break:break-all"><b>@row.ServiceCharge</b></td>
+        <td style="width:141px;word-break:break-all"><b>@row.StripeFee</b></td>
+        <td style="width:145px;word-break:break-all"><b>@row.AmountToCustomer</b></td>*@
+
+                    <td style="width:158px;word-break:break-all">-</td>
+                    <td style="width:129px;word-break:break-all"><b>@row.NumberOfOrders</b></td>
+                    <td style="width:138px;word-break:break-all"><b>@row.Discount</b></td>
+                    <td style="width:132px;word-break:break-all"><b>@row.SaavorDiscount</b></td>
+                    <td style="width:148px;word-break:break-all"><b>@row.SubTotal</b></td>
+                    <td style="width:104px;word-break:break-all"><b>@row.SalesTax</b></td>
+                    <td style="width:124px;word-break:break-all"><b>@row.DeliveryFee</b></td>
+                    <td style="width:147px;word-break:break-all"><b>@row.TipAmount</b></td>
+                    <td style="width:157px;word-break:break-all"><b>@row.TotalAmount</b></td>
+                    <td style="width:162px;word-break:break-all"><b>(@row.ServiceCharge)</b></td>
+                    <td style="width:135px;word-break:break-all"><b>(@row.StripeFee)</b></td>
+                    <td style="width:145px;word-break:break-all"><b>@row.AmountToCustomer</b></td>
+                </tr>
+                    }
+                    else
+                    {
+
+                        <tr>
+                            <td style="width:155px;word-break:break-all;padding-bottom:15px;">@row.KitchenId</td>
+                            <td style="width:129px;word-break:break-all;padding-bottom:15px;">@row.NumberOfOrders</td>
+                            <td style="width:138px;word-break:break-all;padding-bottom:15px;">@row.Discount</td>
+                            <td style="width:132px;word-break:break-all;padding-bottom:15px;">@row.SaavorDiscount</td>
+                            <td style="width:148px;word-break:break-all;padding-bottom:15px;">@row.SubTotal</td>
+                            <td style="width:104px;word-break:break-all;padding-bottom:15px;">@row.SalesTax</td>
+                            <td style="width:124px;word-break:break-all;padding-bottom:15px;">@row.DeliveryFee</td>
+                            <td style="width:147px;word-break:break-all;padding-bottom:15px;">@row.TipAmount</td>
+                            <td style="width:157px;word-break:break-all;padding-bottom:15px;">@row.TotalAmount</td>
+                            <td style="width:162px;word-break:break-all;padding-bottom:15px;">(@row.ServiceCharge)</td>
+                            <td style="width:135px;word-break:break-all;padding-bottom:15px;">(@row.StripeFee)</td>
+                            <td style="width:145px;word-break:break-all;padding-bottom:15px;">@row.AmountToCustomer</td>
+                        </tr>
+
+                        @*<tr><td style="width:125px;word-break:break-all">@row.KitchenId</td>
+                            <td style="width:160px;word-break:break-all">@row.NumberOfOrders</td>
+                            <td style="width:121px;word-break:break-all">@row.Discount</td>
+                            <td style="width:121px;word-break:break-all">@row.SaavorDiscount</td>
+                            <td style="width:121px;word-break:break-all">@row.SubTotal</td>
+                            <td style="width:124px;word-break:break-all">@row.SalesTax</td>
+                            <td style="width:145px;word-break:break-all">@row.DeliveryFee</td>
+                            <td style="width:141px;word-break:break-all">@row.TipAmount</td>
+                            <td style="width:145px;word-break:break-all">@row.TotalAmount</td>
+                            <td style="width:178px;word-break:break-all">@row.ServiceCharge</td>
+                            <td style="width:141px;word-break:break-all">@row.StripeFee</td>
+                            <td style="width:145px;word-break:break-all">@row.AmountToCustomer</td>*@
+                        @*</tr>*@
+                    }
+                }
+            </table>
+        }
+
+    </td>
+
+
+</tr>
+            @*if (Model.Count == i)
+                {
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td> </td>
+                        <td><b>@item.OrderAmount</b></td>
+                        <td><b>@item.Discount</b></td>
+                        <td><b>@item.SalesTax</b></td>
+                        <td><b>@item.ServiceCharge</b></td>
+                        <td><b>@item.DeliveryFee</b></td>
+                        <td><b>@item.TipAmount</b></td>
+                        <td><b>@item.TotalAmount</b></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.OrderDate</td>
+                        <td>@item.OrderAmount</td>
+                        <td>@item.Discount</td>
+                        <td>@item.SalesTax</td>
+                        <td>@item.ServiceCharge</td>
+                        <td>@item.DeliveryFee</td>
+                        <td>@item.TipAmount</td>
+                        <td>@item.TotalAmount</td>
+                    </tr>
+                }*@
+            i++;
+        }
+
+    }
+    else
+    {
+        <tr>
+            <td colspan="13">No record found!</td>
+        </tr>
+    }
+</table>
+
+<div id="financialContainerExport" style="display:none">
+    @await Html.PartialAsync("_FinancialReportPDF", Model)
+</div>

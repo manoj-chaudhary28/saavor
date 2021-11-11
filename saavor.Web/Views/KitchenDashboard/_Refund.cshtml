@@ -1,0 +1,154 @@
+﻿@model saavor.Shared.ViewModel.OrderRefundVm
+    <script src="~/js/manage-refunds.js"></script>
+
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <span class="float-left roboto-bold font-size-20">Issue Refund</span>
+                <span onclick="onClose()" class="close" title="close">×</span>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+            <div class="col-12">
+                <span class="float-left roboto-medium font-size-15">Select Items to Refund</span>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-3">
+            <div class="col-xl-12">
+                <div class="card mb-4" style="border: 1px solid #ccc;">
+                    <div class="card-body">
+                        <div class="table-responsive bg-white">
+                            <table class="table table-bordered invoive-item--table" id="dataTable_" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Items</th>
+                                        <th>Add On</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var i = 1;
+                                    }
+                                    @if (Model != null && Model.DishesItem != null && Model.DishesItem.Count > 0)
+                                    {
+                                        @foreach (var item in Model.DishesItem)
+                                        {
+                                            <tr class="@(item.AlreadyRefunded == 0 ? "disabled_row" : string.Empty)">
+                                                <td>
+                                                    @if (item.AlreadyRefunded == 0)
+                                                    {
+                                                        <div class="disabled_checkbox"></div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" class="refund-item" id="@item.DishId" data="@item.Price" />
+                                                        <label class="grid-checl_label" for="@item.DishId"></label>
+                                                    }
+                                                    <input type="hidden" id="hdnFD" value="@item.FoodOrderDetailId" />
+                                                    <input type="hidden" id="hdnLI" value="@item.LineItem" />
+                                                    <input type="hidden" id="hdnQt" value="@item.Quantity" />
+                                                </td>
+                                                <td>@item.DishName</td>
+                                                <td>
+                                                    @if (item.DishAddOns.Count > 0)
+                                                    {
+                                                        @foreach (var addOns in item.DishAddOns)
+                                                        {
+                                                            <div class="order--dishes">
+                                                                &#9679;
+                                                                @addOns.ItemName - $@addOns.ItemCost
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    @if (Convert.ToInt32(item.Quantity) > 0)
+                                                    {
+                                                        <select class="item-qty">
+                                                            @if (Convert.ToInt32(item.Quantity) > 1)
+                                                            {
+                                                                <option value="-1"> Select </option>
+                                                                @for (int j = 1; j <= Convert.ToInt32(item.Quantity); j++)
+                                                                {
+                                                                    <option value="@j"> @j </option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="1"> 1 </option>
+                                                            }
+
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="disabled_quantity">@item.TotalQuantity</div>
+                                                    }
+                                                </td>
+                                                <td>$@item.Price</td>
+                                            </tr>
+                                            i++;
+                                        }
+                                        <tr><td colspan="5" style="border-bottom: 1px solid #fff !important; padding: 0 !important;"></td></tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5">No order found!</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="form-group w-50">
+                                <label class="control-label w-100">Reason for Refund</label>
+                                <select class="order-refund--reason w-100">
+                                    <option value="-1">Select a reason</option>
+                                    <option value="Out of Stock">Out of Stock</option>
+                                    <option value="Accidental charge">Accidental charge</option>
+                                    <option value="Cancelled order">Cancelled order</option>
+                                    <option value="Fraudulent charge">Fraudulent charge</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="other_reason--container hide">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <input type="text" id="inputOrderRefundReason" maxlength="200" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                        </div>
+                                        <div class="col-2">
+                                            <span class="delivered cursor-pointer close-order--reason">x</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="form-group w-50">
+                                <label class="control-label w-100">Refund to</label>
+                                <span class="refund-to_gateway"> @Model.Card</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="form-group w-50">
+                                <label class="control-label w-100">Amount</label>
+                                <input type="text" id="txtAmount" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                <span class="order-amount_maximum">$@Model.OrderAmount Maximum</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type='submit' class='refund-items' name='next' value='Refund' />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hndF" value="@Model.FoodOrderId" />
+        <input type="hidden" id="hdnA" value="0" />
+    </div>

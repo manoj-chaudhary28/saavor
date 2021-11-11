@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<style>
+    .modal {
+        z-index: 999999999 !important;
+    }
+</style>
+<style>
+    .card {
+        margin: 0 auto;
+        float: none;
+        margin-bottom: 10px;
+    }
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row " style="margin-top: 50px;margin-bottom: 50px">
+        <div class="col-12">
+            <div class="card w-50 cW100">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <span class="material-icons float-left color-black">west</span>
+                        </div>
+                        <div class="col-sm-4 form-group text-center">
+                            <span class="float-left w-100 cuisines_title_name">Menu</span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+
+                            <div class="form-group has-search">
+                                <span class="fa fa-search form-control-feedback"></span>
+                                <input type="text" class="form-control" id="cuisinessearch" name="cuisinessearch" placeholder="Search items">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row bg-dark color-white pt-2 pb-2">
+                        <div class="col-sm-6">
+                            From Chef's Home
+                        </div>
+                        <div class="col-sm-6 text-right">
+                          <input type="button" value="+SUB-CATEGORY" class="btn-add-subcategory"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <div class="table-responsive pb-4 bg-white">
+                                <table class="table table-bordered pb-4 table-subcategory" width="100%" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="cuisines_name">Asian</div>
+                                                <div class="delete_icon">
+                                                    <span class="material-icons float-left color-black">
+                                                        create
+                                                    </span>
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered pb-4 table-dishes" width="100%" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                
+                                                <div class="cuisines_name">Sef Food</div>
+                                                <div class="delete_icon">                                                    
+                                                    <span class="material-icons float-left color-black">
+                                                        delete
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="addSubCategory" class="modal">
+    <div class="modal-content animate w-25">
+        <div class="container invoice--info">
+            <div>
+                <div class="row">
+                    <div class="col-12 text-center font-weight-600"> SubCategory </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-12 text-center">Title</div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-12">  <input type="text" class="form-control" id="subCategoryName" name="subCategoryName" placeholder="Title"> </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-sm-12 ">
+                        <input type="button" id="subCategorySave" class="message-post" name="Save" value="Save">
+                        or
+                        <a asp-action="messages" asp-controller="message">Cancel</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+

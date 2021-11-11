@@ -1,0 +1,73 @@
+﻿@model saavor.Shared.DTO.Login.LoginInputDTO
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<link href="/assets/css/login.css?v=1.1" rel="stylesheet" />
+<!--   Big container   -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4 login-row">
+            <!--      Wizard container        -->
+            <div class="wizard-container">
+                <div class="card wizard-card" data-color="red" id="wizard">
+                    <form method="post">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="details">
+                                <div class="row">
+                                    <div class="col-sm-12 text-center m-bottom">
+                                        <img src='/assets/img/logo.png' />
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">Email</label>
+                                                <input type="text" asp-for="Email" autocomplete="off" data-control-for="email" spellcheck="false" autocapitalize="none" class="form-control">
+                                            </div>
+                                            <span asp-validation-for="Email"></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">Password</label>
+                                                <input type="password" asp-for="Password" autocomplete="off" class="form-control" data-control-for="password">
+                                            </div>
+                                            <span asp-validation-for="Password"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 m-top text-center">
+                                        <input type='submit' class='login-button' name='next' value='Sign in' />
+                                    </div>
+                                    <div class="col-sm-12 m-top text-center font-weight_400">
+                                        Don't have an account? <a asp-controller="auth" asp-action="signup" class="sign-up-text_color">Sign up</a>
+                                    </div>
+                                    <div class="col-sm-12 text-center font-weight_400">
+                                        or
+                                    </div>
+                                    <div class="col-sm-12 text-center font-weight_400">
+                                        <a asp-controller="auth" asp-action="sendemail" class="sign-up-text_color">Forgot password?</a>
+                                    </div>
+                                    <div class="col-sm-12 m-top text-center font-weight_400 sign-up-text_color">
+
+                                        @if (Model.Message != null)
+                                        {
+                                            @Model.Message
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div> <!-- wizard container -->
+        </div>
+    </div> <!-- row -->
+</div> <!--  big container -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

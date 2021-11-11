@@ -1,0 +1,203 @@
+﻿@model saavor.Shared.ViewModel.KitchenDashboardVm
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/chart/jquery.simple-bar-graph.css?01110101001111" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card color-theme text-white mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <span class="w-100 float-left roboto-bold font-size-25">@Model.Count.TotalMenus</span>
+                            <span class="w-100 float-left roboto-bold font-size-14">Total Menu Items</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="float-right mt-2 mb-2">
+                                <span class="material-icons font-size-25"> fastfood</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card color-theme text-white mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <span class="w-100 float-left roboto-bold font-size-25">@Model.Count.TotalRevenue</span>
+                            <span class="w-100 float-left roboto-bold font-size-14">Total Revenue</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="float-right mt-2 mb-2">
+                                <span class="material-icons font-size-25">stacked_line_chart</span>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card color-theme text-white mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <span class="w-100 float-left roboto-bold font-size-25">@Model.Count.TotalOrder</span>
+                            <span class="w-100 float-left roboto-bold font-size-14">Total Orders</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="float-right mt-2 mb-2">
+                                <span class="material-icons font-size-25">flatware</span>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card color-theme text-white mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9">
+                            <span class="w-100 float-left roboto-bold font-size-25">@Model.Count.TotalCustomers</span>
+                            <span class="w-100 float-left roboto-bold font-size-14">Total Customers</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="float-right mt-2 mb-2">
+                                <span class="material-icons font-size-25">groups</span>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     
+    <div class="row">
+        <div class="col-xl-7">
+            <div class="card mb-4">
+                <div class="card-header bg-white roboto-bold font-size-20 text-right">
+                    <span class="float-left">Order Summary</span>
+                    <span class="float-right order_summary_top--filter w-50">
+                        <span class="filter_active order_summary--filters cursor-pointer" type="Monthly">Monthly</span>
+                        <span class="order_summary--filters cursor-pointer" type="Weekly">Weekly</span>
+                        <span class="order_summary--filters cursor-pointer" type="Today">Today</span>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div id="ordersummary-chart" data-percent="0"></div>
+                        </div>
+                        <div class="col-6 text-center">
+                            <span class="total_order_ roboto-bold font-size-25 w-100 float-left"><span class="total_order">0</span> <span class="text_orders_UPDTE">Orders</span></span>
+                            <span class="w-100 float-left text-center mt-4">
+                                @*<span class="more_detail pl-3 pb-2 pr-3 pt-2">
+                More details
+            </span>*@
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row row mt-5 mb-4">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body p-0">
+                                    <div class="row_">
+                                        <div class="col-12_">
+                                            <span class="order-summary_count--container float-left text-center">
+                                                <span class="total_count--pickup float-left w-100 roboto-bold font-size-20">0</span>
+                                                <span class="total_count--title float-left w-100 roboto-medium color-gray">Pickup</span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body p-0">
+                                    <div class="row_">
+                                        <div class="col-12_">
+                                            <span class="order-summary_count--container float-left text-center">
+                                                <span class="total_count--deleivered float-left w-100 roboto-bold font-size-20">0</span>
+                                                <span class="total_count--title float-left w-100 roboto-medium color-gray">Delivered</span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body p-0">
+                                    <div class="row_">
+                                        <div class="col-12_">
+                                            <span class="order-summary_count--container float-left text-center">
+                                                <span class="total_count--cancelled float-left w-100 roboto-bold font-size-20">0</span>
+                                                <span class="total_count--title float-left w-100 roboto-medium color-gray">Cancelled</span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body p-0">
+                                    <div class="row_">
+                                        <div class="col-12_">
+                                            <span class="order-summary_count--container float-left text-center">
+                                                <span class="total_count--rejected float-left w-100 roboto-bold font-size-20">0</span>
+                                                <span class="total_count--title float-left w-100 roboto-medium color-gray">Rejected</span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5">
+            <div class="card mb-4">
+                <div class="card-header bg-white roboto-bold font-size-20">
+                    Revenue
+                    @*<span class="float-right">
+                        <select class="chart_dropdown--list">
+                            <option value="All">All</option>
+                        </select>
+                    </span>*@
+                </div>
+                <div class="card-body">
+                    <div id="revenue-chart">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/chart/jquery.simple-bar-graph.js"></script>
+    <script src="~/chart/jquery.circlechart.js"></script>
+    <script src="~/js/jquery-migrate-3.0.0.min.js"></script>
+    <link href="~/css/jquery-ui.css" rel="stylesheet" />
+    <script src="~/js/jquery-ui-1.11.4.js"></script>
+    <script src="~/js/kitchen-dashboard.js"></script>
+}
+
+

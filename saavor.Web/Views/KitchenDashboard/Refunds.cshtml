@@ -1,0 +1,92 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenOrdersVm>
+@{
+    ViewData["Title"] = "Refund";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<style>
+    .modal {z-index: 999999999 !important; }
+</style>
+<!--   Big container   -->
+<div class="container-fluid">    
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("refunds", "kitchendashboard"))
+            {
+                <div class="grid-search bg-white">
+                    <div class="input-group">
+                        <input id="search" type="text" class="form-control roboto-regular font-size-14" name="search" value="@ViewData["CurrentFilter"]" placeholder="Search by order ID, name, email">
+                        <div class="input-group-append">
+                            <button class="btn color-theme color-white" type="submit" id="button-search_kitchen">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="table-responsive mt-4 pb-4 bg-white">
+                <table class="table table-bordered manage_order--table" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="8%">Order ID</th>
+                            <th width="20%">Order Date</th>
+                            <th width="30%">User Name</th>
+                            <th width="30%">User Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var i = 1;
+                        }
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td data-title="Order ID">
+                                        @item.OrderId
+                                        <input type="hidden" value="@item.FoodOrderId" />
+                                    </td>
+                                    <td data-title="Order Date">@item.OrderDate</td>
+                                    <td data-title="User Name">@item.UserName</td>
+                                    <td data-title="User Email">@item.UserEmail</td>
+                                    <td data-title="Action" width="14%">
+                                        <i class="fa fa-info-circle cursor-pointer" data="@item.FoodOrderId" onclick="onLoadItems(this)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">No order found!</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="orderRefunds" class="modal">
+    <div class="modal-content animate">
+        <div class="container item_refund--info">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/manage-refunds.js"></script>
+}

@@ -1,0 +1,98 @@
+﻿@model saavor.Shared.ViewModel.ManageBalanceKitchenInvoiceVm
+
+<div>
+    <div class="row">
+        <div class="col-6">
+            @*<span id="exporttoPdf" onclick="onLoadOrderInvoiceToPDF()"> <img src="~/images/PDF_file_icon.svg" style="width:30px;height:30px; cursor:pointer" /></span>*@
+        </div>
+        <div class="col-6">
+            <span class="float-left roboto-bold font-size-20"></span>
+            <span onclick="onClose()" class="close" title="close">×</span>
+        </div>
+    </div>
+
+    <div class="invoice--export">
+        <div class="row mt-4 mb-4">
+            <div class="col-6">
+                <span class="float-left roboto-medium font-size-20">Invoice</span>
+            </div>
+            @*<div class="col-6">
+                <span class="float-right roboto-regular font-size-16">Order #@Model.FoodOrderDetail.OrderNumber</span>
+                <input type="hidden" id="hdnOrderNumber" value="@Model.FoodOrderDetail.OrderNumber" />
+            </div>*@
+        </div>
+        <div class="row mt-4 mb-3">
+            <div class="col-6 invoice--from">
+                @*<span><b>From:</b></span>
+                <span>@Model.FoodOrderDetail.KitchenName</span>
+                <span>@Model.FoodOrderDetail.Address1 @Model.FoodOrderDetail.ZipCode</span>
+                <span>Ph:@Model.FoodOrderDetail.PhoneNo</span>*@
+            </div>
+            <div class="col-6 invoice--to">
+                <span><b>To:</b></span>
+                <span>@Model.KitchenName</span>
+                <span>@Model.KitchenAddress</span>
+                <span>@Model.KitchenCityName, @Model.KitchenStateName</span>
+                <span>Ph: @Model.KitchenPhoneNo</span>
+
+            </div>
+        </div>
+        <div class="row mt-4 mb-3">
+            <div class="col-12 invoice--from">                 
+                <span><b>Bill Duration:</b> @Convert.ToDateTime(Model.StartMonth).ToString("dd MMM yyyy") - @Convert.ToDateTime(Model.EndMonth).ToString("dd MMM yyyy")</span>
+            </div>
+        </div>
+       
+        <div class="row mt-4 mb-3">
+            <div class="col-xl-12">
+                <div class="card mb-4" style="border: 1px solid #ccc;">
+                    <div class="card-header">
+                        Bill summary
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive bg-white">
+                            <table class="table table-bordered invoive-item--table" id="dataTable_" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Total no of transaction</th>
+                                        <th>Saavor charges(per transaction)</th>
+                                        <th class="text-right">Total amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>@Model.TotalTransaction</td>
+                                        <td>@Model.ServiceCharge</td>
+                                        <td class="text-right">@Model.Amount</td>                                      
+                                    </tr>
+
+                                        <tr><td colspan="3" style="border-bottom: 1px solid #fff !important; padding: 0 !important;"></td></tr>
+                                        <tr>
+                                            <td colspan="3" style="border-bottom: 1px solid #fff !important;padding: .1rem !important;" class="text-right">
+                                                <span>Sub total</span> <b>@Model.Amount</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border-bottom: 1px solid #fff !important;padding: .1rem !important;" class="text-right">
+                                                <span>Sale Tax</span> <b>@Model.SalesTax</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border-bottom: 1px solid #fff !important;padding: .1rem !important;" class="text-right">
+                                                <span>Total</span> <b>@Model.TotalAmount</b>
+                                            </td>
+                                        </tr>
+                                         
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

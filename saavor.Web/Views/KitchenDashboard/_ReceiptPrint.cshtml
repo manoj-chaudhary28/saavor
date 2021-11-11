@@ -1,0 +1,141 @@
+﻿@model saavor.Shared.ViewModel.KitchenOrderInvoiceVm
+
+<div class="ticket">
+    <div class="row">
+        <div class="col-12">
+            <span class="customer_name">@Model.FoodOrderDetail.FirstName @Model.FoodOrderDetail.LastName</span>
+        </div>
+    </div>
+    <div class="row pt-2">
+        <div class="col-12">
+            <span class="company_N_o">Saavor #@Model.FoodOrderDetail.OrderNumber</span>
+        </div>
+    </div>
+    <div class="row brd_top pb-2">
+        <div class="col-6">
+            <span class="cust_phone">@Model.FoodOrderDetail.MobileNo</span>
+        </div>
+        <div class="col-6">
+            <span class="cust_pin">Pin: @Model.FoodOrderDetail.Zip</span>
+        </div>
+    </div>
+    <div class="row pb-2">
+        <div class="col-6">
+            <span class="delivery_name">Delivery note:</span>
+        </div>
+        <div class="col-6">
+            <span class="cust_pin">@Model.FoodOrderDetail.DeliveryNote</span>
+        </div>
+    </div>
+
+    <div class="row brd_top pt-2">
+        <div class="col-12">
+            <span class="vegan_seeds">@Model.FoodOrderDetail.KitchenName</span>
+        </div>
+    </div>
+
+    <div class="row pt-2 pb-4">
+        <div class="col-6">
+            <span class="ord_items">
+                @if (Model != null && Model.DishesItem != null && Model.DishesItem.Count > 0)
+                {
+                    @if (Model.DishesItem.Count > 1)
+                    {
+                        <span>@Model.DishesItem.Count items</span>
+                    }
+                    else
+                    {
+                        <span>@Model.DishesItem.Count item</span>
+                    }
+                }
+            </span>
+        </div>
+        <div class="col-6">
+            <span class="ord_item_status">Delivery</span>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="order_note_container">
+                <span class="order_note_heading">ORDER NOTE</span>
+                <span class="order_note">@Model.FoodOrderDetail.OrderNote</span>
+            </div>
+        </div>
+    </div>
+    <div class="row pt-2 pb-3">
+        <div class="col-12">
+            <table>
+                <tbody>
+                    @if (Model != null && Model.DishesItem != null && Model.DishesItem.Count > 0)
+                    {
+                        @foreach (var item in Model.DishesItem)
+                        {
+                            <tr>
+                                <td class="description">@item.Quantity<span>x</span> @item.DishName</td>
+                                <td class="price">$@item.Total</td>
+                            </tr>
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row brd_top pt-1 pb-3">
+        <div class="col-12">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="pos_subtotal">Subtotal:</td>
+                        <td class="pos_subtotal_price">$@Model.FoodOrderDetail.SubTotal</td>
+                    </tr>
+                    <tr>
+                        <td class="pos_discount">Promo Code/Discount:</td>
+                        <td class="pos_discount_price">($@Model.FoodOrderDetail.PromoCodeAndDiscount)</td>
+                    </tr>
+                    <tr>
+                        <td class="pos_tax">Taxes & Charges:</td>
+                        <td class="pos_tax_price">$@Model.FoodOrderDetail.TaxesCharges</td>
+                    </tr>
+                    <tr>
+                        <td class="pos_tax">Total:</td>
+                        <td class="pos_tax_price">$@Model.FoodOrderDetail.TotalAmount</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row brd_top pt-1 pb-2">
+        <div class="col-12">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="pos_subtotal">@Model.FoodOrderDetail.KitchenName</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row brd_top pt-1 pb-2">
+        <div class="col-12">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="pos_subtotal">Thank you, we hope you enjoy your meal.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col-12">
+            <div class="order_note_container">
+                <span class="order_note receipt_current_date">Received: @DateTime.Now.ToString("ddd MMM yy") at @DateTime.Now.ToString("hh:mm tt")</span>
+            </div>
+        </div>
+    </div>
+</div>

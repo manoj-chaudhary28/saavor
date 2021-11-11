@@ -1,0 +1,57 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenOrdersVm>
+@{
+    ViewData["Title"] = "Manage Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row mt-4 mb-4">
+        <div class="col-12 manage-order_menus">
+            @*<span class="manage-order_menus--navigation" action="/allorders">All</span>*@
+            <span class="manage-order_menus--navigation" action="/orders/new">New</span>
+            @*<span class="manage-order_menus--navigation" action="/kitchendashboard/preparationorders">Preparation</span>*@
+        <span class="manage-order_menus--navigation" action="/orders/preparing">Preparing</span>
+            <span class="order_active manage-order_menus--navigation" action="/orders/pickup">Here for Pick up</span>
+            <span class="manage-order_menus--navigation" action="/orders/delivery">Delivery</span>
+            <span class="manage-order_menus--navigation" action="/orders/completed">Completed</span>
+            <span class="manage-order_menus--navigation" action="/orders/rejected">Rejected</span>
+        </div>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("pickuporders", "kitchendashboard"))
+            {
+                <div class="grid-search bg-white">
+                    <div class="input-group">
+                        <input id="search" type="text" class="form-control roboto-regular font-size-14" name="search" value="@ViewData["CurrentFilter"]" placeholder="Search by order ID, name, email">
+                        <div class="input-group-append">
+                            <button class="btn color-theme color-white" type="submit" id="button-search_kitchen">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            } 
+            <div class="manage_order--table mt-4">
+                <span class="delivered cursor-pointer" onclick="onUpdateStatusAll(this)">Completed</span><br>
+            </div>
+            <div class="table-responsive mt-4 pb-4 bg-white">               
+                <div class="pickup-orders">
+                    @await Html.PartialAsync("_PickupOrders", Model)
+                </div>          
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="receipt-container" style="display:none"></div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/manage-order.js"></script>
+}

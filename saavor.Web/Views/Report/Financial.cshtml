@@ -1,0 +1,114 @@
+﻿@model saavor.Shared.ViewModel.FinancialVm
+@{
+    ViewData["Title"] = "Master Financial Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--   Big container   -->
+<div class="container-fluid">
+
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12 start-end-date--filters">
+            @using (Html.BeginForm("financial", "report"))
+            {
+            <div class="row mb-5">
+                <div class="col-12 col-md-6 col-lg-3 col-xl-3"><div class="input-group date mr-3 mb-2 multiselect-main float-left">
+                      @Html.ListBoxFor(model => model.KitchenId, new MultiSelectList(Model.Kitchens, "Value", "Text"), new { @class = "form-control", multiple = "multiple", id = "Subjects_dropdown" })
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 col-xl-3">
+                    <div id="dbStart" class="input-group date mr-3 mb-2 reports--date float-left" data-date-format="mm-dd-yyyy">
+                        <input id="fromDate" class="form-control" type="text" value="@TempData["fromDate"]" name="fromDate" readonly />
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 col-xl-3">
+                    <div id="dbEnd" class="input-group date  mb-2 reports--date float-left" data-date-format="mm-dd-yyyy">
+                        <input id="endDate" class="form-control" type="text" value="@TempData["toDate"]" name="toDate" readonly />
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 col-xl-3 text-right pr-0"> <input type="button" id="btnSearch" class="float-left_ color-theme export--report" value="Search" /></div>
+            </div>
+                @*<div class="input-group date mr-3 mb-4 multiselect-main float-left">
+                    @Html.ListBoxFor(model => model.KitchenId, new MultiSelectList(Model.Kitchens, "Value", "Text"), new { @class = "form-control", multiple = "multiple", id = "Subjects_dropdown" })
+                </div>
+
+                <div id="dbStart" class="input-group date mr-3 mb-4 reports--date float-left" data-date-format="mm-dd-yyyy">
+                    <input id="fromDate" class="form-control" type="text" value="@TempData["fromDate"]" name="fromDate" readonly />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div id="dbEnd" class="input-group date  mb-4 reports--date float-left" data-date-format="mm-dd-yyyy">
+                    <input id="endDate" class="form-control" type="text" value="@TempData["toDate"]" name="toDate" readonly />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input type="button" id="btnSearch" class="float-left color-theme export--report" value="Search" />*@
+
+            }
+
+            <div class="table-responsive mt-5 pb-4 bg-white">
+                <span class="float-left mt-3 mb-3 pl-3">
+                    <span class="financial-date-periods roboto-bold" id="selectedFilters">@TempData["SelectedFilter"]</span>
+                </span>
+                <input type="button" id="btnExport" class="float-right color-theme export--report mt-3 mb-3" value="Export" />
+                <div id="financialContainer">
+                    @await Html.PartialAsync("_FinancialReport", Model)
+                </div>
+                <div id="pagingDiv" class="float-right pr-3">@Html.Raw(ViewBag.Paging)</div>
+            </div>
+        </div>
+    </div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+<div id="export" class="hide"></div>
+<div id="editor"></div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link href="~/css/datepicker.css" rel="stylesheet" />
+    <script src="~/js/sources/bootstrap_v3.2.0.min.js"></script>
+    <script src="~/js/sources/bootstrap-datepicker_1.3.0.js"></script>
+    <script src="~/js/sources/jspdf_1.5.3.min.js"></script>
+    <script src="~/js/sources/jspdf.plugin.autotable_v3.5.6.min.js"></script>
+    <script src="~/js/application/jquery.multiselect.js"></script>
+    <script src="~/js/application/jquery.common.js"></script>
+    <script src="~/js/application/jquery.financialreport.js?v=1.1"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Subjects_dropdown').multiselect();
+            $("#dbStart,#dbEnd").datepicker({
+                //format: "mm-yyyy",
+                //startView: "months",
+                //minViewMode: "months",
+                autoclose: true,
+                todayHighlight: true,
+            });
+            $(".input-group-addon").click();
+            var object = $(".datepicker ");
+            if ($(object).length > 0) {
+                $(object).remove();
+            }
+            Financial.Init();
+
+            $("body").on("click", "#btnExport", function () {
+                var selectedKitchen = $(".multiselect-main").find("button").attr("title");
+                var header = "Saavor - " + selectedKitchen + " - " + $("#fromDate").val() + " to " + $("#endDate").val();
+                var fileName = "Financial-report-" + $(".header--kitchen_name").text() + "-" + $("#fromDate").val() + "-" + $("#endDate").val() + ".pdf"
+                generatePDF(header, fileName, "financialDataTableExport");
+            });
+        });
+    </script>
+}

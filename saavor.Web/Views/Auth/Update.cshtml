@@ -1,0 +1,214 @@
+﻿@model saavor.Shared.DTO.SignUp.SignupUpdateInputDTO
+@{
+    ViewData["Title"] = "Manage Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/assets/css/SignUp.css" rel="stylesheet" />
+<link href="~/css/intlTelInput.css" rel="stylesheet" />
+<link href="~/css/demo.css" rel="stylesheet" />
+
+<style>
+    .nav-pills > li {
+        float: none;
+    }
+
+    .country-code {
+        margin-top: 0;
+    }
+
+    .field-validation-error {
+        color: red;
+    }
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-sm-offset-2">
+            <!--      Wizard container        -->
+            <div class="wizard-container">
+                <div class="card wizard-card" data-color="red" id="wizard">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="tab-content">
+                            <div class="tab-pane active p-3" id="details">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-12 text-center m-bottom manage-business--logo  mb-4">
+                                                <img src='/businesslogo/@Model.FileName' />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group_">
+                                                        <label class="control-label">Business logo</label>
+                                                        <input asp-for="BusinessLogo" type="file" class="form-control custom-input--file">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Business name</label>
+                                                        <input type="text" asp-for="BusinessName" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                    </div>
+                                                    <span asp-validation-for="BusinessName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">First name</label>
+                                                        <input type="text" asp-for="FirstName" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                    </div>
+                                                    <span asp-validation-for="FirstName"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Last name</label>
+                                                        <input type="text" asp-for="LastName" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                    </div>
+                                                    <span asp-validation-for="LastName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Email</label>
+                                                        <input type="text" asp-for="Email" readonly="readonly" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group">
+                                                            <div class="form-group label-floating">
+                                                                <label class="control-label">Mobile No</label>
+                                                                <input id="phoneNumber" type="text" asp-for="Contact" placeholder="Mobile no" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                            </div>
+                                                            <span asp-validation-for="Contact"></span>
+                                                            <input type="hidden" id="hdnCountryCode" asp-for="ContactCountryCode" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Address</label>
+                                                        @*<input type="text" asp-for="Address" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">*@
+                                                        <textarea class="form-control custom-height-100" asp-for="Address" type="textarea" placeholder="" maxlength="6000" rows="7"></textarea>
+                                                    </div>
+                                                    <span asp-validation-for="Address"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating country-code custom-mb-20">
+                                                        <label class="control-label">Country</label>
+                                                        <select id="ddlCountry" asp-for="Country" asp-items="@(new SelectList(Model.CountryStateList.Countries,"Id","Name"))"></select>
+                                                    </div>
+                                                    <span asp-validation-for="Country"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating country-code custom-mb-20">
+                                                        <label class="control-label">State</label>
+                                                        <select id="ddlState" asp-for="State" asp-items="@(new SelectList(Model.CountryStateList.States,"Id","Name"))"></select>
+
+                                                    </div>
+                                                    <span asp-validation-for="State"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">City</label>
+                                                        <input type="text" asp-for="City" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                    </div>
+                                                    <span asp-validation-for="City"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">EIN/Tax ID</label>
+                                                        <input type="text" asp-for="TaxId" autocomplete="off" spellcheck="false" autocapitalize="none" class="form-control">
+                                                    </div>
+                                                    <span asp-validation-for="TaxId"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 m-top">
+                                        <input type='submit' class='update-profile' name='next' value='Update' />
+                                    </div>
+                                    <div class="col-sm-12 m-top text-center font-weight_400 sign-up-text_color">
+
+                                        @if (Model.Message != null)
+                                        {
+                                            @Model.Message
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div> <!-- wizard container -->
+        </div>
+    </div> <!-- row -->
+</div> <!--  big container -->
+ 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/intlTelInput.js"></script>
+    <script>
+        var input = document.querySelector("#phoneNumber");
+        window.intlTelInput(input, {
+            utilsScript: "/js/utils.js",
+        });
+        $("#ddlCountry").change(function () {
+            var CountryId = parseInt($(this).val());
+            if (!isNaN(CountryId)) {
+                var ddlState = $('#ddlState');
+                ddlState.empty();
+                ddlState.append($("<option></option>").val('').html('Please wait ...'));
+                $.ajax({
+                    url: '/Auth/GetState',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { countryId: CountryId },
+                    success: function (d) {
+                        ddlState.empty(); // Clear the please wait
+                        $.each(d, function (i, states) {
+                            ddlState.append($("<option></option>").val(states.id).html(states.name));
+                        });
+                    },
+                    error: function () {
+                        alert('Error!');
+                    }
+                });
+            }
+        });
+    </script>
+}
+

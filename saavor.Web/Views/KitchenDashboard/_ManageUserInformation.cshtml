@@ -1,0 +1,67 @@
+﻿@model saavor.Shared.ViewModel.KitchenUserInformationVm
+
+
+
+<div>
+    <div class="row">
+        <div class="col-12">
+            <span class="float-left roboto-bold font-size-20"> User Info</span>
+            <span onclick="document.getElementById('managerUserInformation').style.display='none'" class="close" title="close">×</span>
+        </div>
+    </div>
+    <div class="row mt-4 mb-5">
+        <div class="col-3">
+            <span>
+                <img src="@Model.ProfileImagePath" class="w-100"/>
+            </span>
+        </div>
+        <div class="col-4">
+            <span class="w-100 float-left roboto-bold font-size-20">@Model.FirstName @Model.LastName </span>
+            <div class="w-100 float-left">
+                <span class="roboto-medium font-size-14">Reg.Date:</span>  <span class="roboto-regular font-size-14">@Model.CreateDate</span>
+            </div>
+            <div class="w-100 float-left">
+                <span class="roboto-medium font-size-14">Mobile:</span>  <span class="roboto-regular font-size-14">@Model.MobileNo</span>
+            </div>
+            <div class="w-100 float-left">
+                <span class="roboto-medium font-size-14">Email:</span>  <span class="roboto-regular font-size-14">@Model.Email</span>
+            </div>
+            <div class="w-100 float-left">
+                <span class="roboto-medium font-size-14">Status:</span>  <span class="roboto-regular font-size-14">@Model.Status</span>
+            </div>
+        </div>
+        <div class="col-5">
+            <span class="w-100 float-left font-size-18 roboto-medium">Addresses</span>
+            <div class="w-100 float-left">
+                <span class="roboto-regular font-size-14">@Model.Address</span>
+            </div>
+           
+        </div>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-3">
+            <span class="order-summary_count--container float-left text-center">
+                <span class="total_count--ondelivery float-left w-100 roboto-bold font-size-25">@Model.TotalOrder</span>
+                <span class="total_count--title float-left w-100 roboto-medium color-gray">Food Orders</span>
+            </span>
+        </div>
+        <div class="col-3">
+            <span class="order-summary_count--container float-left text-center">
+                <span class="total_count--ondelivery float-left w-100 roboto-bold font-size-25">@Model.CancelledOrder</span>
+                <span class="total_count--title float-left w-100 roboto-medium color-gray">Cancelled</span>
+            </span>
+        </div>
+        <div class="col-3">
+            <span class="order-summary_count--container float-left text-center">
+                <span class="total_count--ondelivery float-left w-100 roboto-bold font-size-25">@Model.TotalReviews</span>
+                <span class="total_count--title float-left w-100 roboto-medium color-gray">Reviews</span>
+            </span>
+        </div>
+        <div class="col-3">
+            <span class="order-summary_count--container float-left text-center">
+                <span class="total_count--ondelivery float-left w-100 roboto-bold font-size-25">@Model.Tickets</span>
+                <span class="total_count--title float-left w-100 roboto-medium color-gray">Tickets</span>
+            </span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,212 @@
+﻿@model List<saavor.Shared.ViewModel.KitchenReviewsModel>
+@{
+    ViewData["Title"] = "Reviews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/modal-popup.css" rel="stylesheet" />
+<style>
+    .modal {z-index: 999999999 !important}
+    .modal-content {width: 50% !important;}
+    .user_review-img img {width: 100%;height: auto}
+    .user_review--feedback .review, .date--review {font-family: "Roboto Regular" !important;font-size: 13px;line-height: 25px;}
+    .btn-reply {border: 1px solid #000;background: #000;color: #fff;}
+</style>
+<!--   Big container   -->
+<div class="container-fluid">
+    <div class="row mt-4 mb-2">
+        <div class="col-sm-12 start-end-date--filters">
+            @using (Html.BeginForm("reviewfeedbacks", "kitchendashboard"))
+            {
+                @*<div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <span class="float-left mr-3">From</span>
+                                <div id="datepickerFrom" class="input-group date  mb-4_  review_filters--date" data-date-format="mm-dd-yyyy" style="width:200px">
+                                    <input id="searchDateFrom" class="form-control reports--datepicker bg-dark" name="fromDate" value="@TempData["CalendarDateFrom"]" type="text" readonly style="border-color: #343a40" />
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        <span class="material-icons material-icon--date">
+                                            calendar_today
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <span class="float-left mr-3">To</span>
+                                <div id="datepickerTo" class="input-group date  mb-4_ float-left review_filters--date mr-4" data-date-format="mm-dd-yyyy" style="width:200px">
+                                    <input id="searchDateTo" class="form-control reports--datepicker bg-dark" name="toDate" value="@TempData["CalendarDateTo"]" type="text" readonly style="border-color: #343a40" />
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        <span class="material-icons material-icon--date">
+                                            calendar_today
+                                        </span>
+                                    </span>
+                                </div>
+                                <button class="btn color-theme color-white float-left" type="submit" id="button-search_kitchen">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>*@
+
+                <div id="dbStart" class="input-group date mr-3 mb-4 reports--date float-left" data-date-format="mm-dd-yyyy">
+                    <input class="form-control" type="text" value="@TempData["CalendarDateFrom"]" name="fromDate" readonly />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div id="dbEnd" class="input-group date  mb-4 reports--date float-left" data-date-format="mm-dd-yyyy">
+                    <input class="form-control" type="text" value="@TempData["CalendarDateTo"]" name="toDate" readonly />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input type="submit" id="btnSearch" class="float-left color-theme export--report" value="Search" />
+            }
+        </div>
+    </div>
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="row mt-0 mb-4">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row user_review--feedback">
+                                <div class="col-md-1 user_review-img">
+                                    @*<img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />*@
+                                    <img src="@item.ProfileImg" class="img img-rounded img-fluid" />
+
+                                </div>
+                                <div class="col-md-11">
+                                    <span class="roboto-bold">
+                                        @item.FirstName @item.Lastname
+                                    </span>
+                                    <div class="clearfix"></div>
+                                    <span>
+                                        @{
+                                            var i = 5 - item.Stars;
+                                        }
+
+                                        @for (int j = 0; j < item.Stars; j++)
+                                        {
+                                            <span class=""><i class="custom-star-color fa fa-star"></i></span>
+                                        }
+                                        @if (i > 0)
+                                        {
+                                            @for (int k = 0; k < i; k++)
+                                            {
+                                                <span class=""><i class="custom-star-color-default fa fa-star"></i></span>
+                                            }
+                                        }
+                                    </span>
+                                    <span class="text-secondary date--review w-100 float-left mt-1">@item.CreateDate</span>
+                                    <span class="review w-100 float-left mt-2">@item.ReviewMessage</span>
+                                    @if (item.ReplyReviewList.Count > 0)
+                                    {
+                                        @foreach (var reply in item.ReplyReviewList)
+                                        {
+                                            <span class="review w-100 float-left mt-2" style="font-family:Roboto Bold !important">Response <span style="font-family: Roboto Regular !important">@reply.CreateDate</span></span>
+                                            <span class="review w-100 float-left mt-2">@reply.ReplyMessage</span>
+                                        }
+
+                                    }
+
+                                    <span>
+                                        @if (item.ReplyReviewList.Count == 0)
+                                        {
+                                            <span class="float-right btn btn-reply ml-2" data="@item.ReviewId" onclick="onReply(this)"><i class="fa fa-reply"></i> Reply</span>
+                                        }
+                                        <a href="javascript:void(0)" data="@item.ReviewId" class="delete--action float-right pt-1" title="delete">Delete</a>
+                                        <input type="hidden" id="hdnId" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row mt-4 mb-4">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        No record found!
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div id="pagingDiv" class="float-right pr-3 mb-5">@Html.Raw(ViewBag.Paging)</div>
+</div> <!--  big container -->
+<div class="loading_container_overlay hide"></div>
+<div class="loader_container hide">
+    <div class="rainbow">
+        <img src="/images/logo.png" alt="">
+    </div>
+</div>
+
+<div id="replyToReview" class="modal">
+    <div class="modal-content animate">
+        <div class="container">
+            <div>
+                <div class="row">
+                    <div class="col-12">
+                        <span class="float-left roboto-bold font-size-20"> What is your reply?</span>
+                        <span onclick="document.getElementById('replyToReview').style.display='none'" class="close" title="close">×</span>
+                    </div>
+                </div>
+                <div class="row mt-4 mb-3">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <div class="form-group w-100">                                
+                                <textarea id="txtReply" class="w-100" maxlength="390" style="height:130px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <input type='submit' class='review-reply' name='next' value='Ok' />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/bootstrap-confirm-delete.js"></script>
+    <script src="~/js/kitchen-reviews.js"></script>
+    <link href="~/css/datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(function () {
+            $("#dbStart,#dbEnd").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+            });
+            $(".input-group-addon").click();
+            var object = $(".datepicker ");
+            if ($(object).length > 0) {
+                $(object).remove();
+            }
+        });
+        $("#datepicker").datepicker().on("changeDate", function (e) {
+            setTimeout(function () {
+                $("#button-search_orders").click();
+            }, 300);
+        });
+    </script>
+}
+
