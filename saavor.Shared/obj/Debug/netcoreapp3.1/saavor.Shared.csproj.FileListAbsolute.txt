@@ -1,0 +1,9 @@
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\bin\Debug\netcoreapp3.1\saavor.Shared.deps.json
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\bin\Debug\netcoreapp3.1\saavor.Shared.dll
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\bin\Debug\netcoreapp3.1\saavor.Shared.pdb
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\obj\Debug\netcoreapp3.1\saavor.Shared.AssemblyInfoInputs.cache
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\obj\Debug\netcoreapp3.1\saavor.Shared.AssemblyInfo.cs
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\obj\Debug\netcoreapp3.1\saavor.Shared.dll
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\obj\Debug\netcoreapp3.1\saavor.Shared.pdb
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\obj\Debug\netcoreapp3.1\saavor.Shared.csproj.CoreCompileInputs.cache
+D:\Project\Local\Saavor\dashboard\saavor\saavor.Shared\obj\Debug\netcoreapp3.1\saavor.Shared.csprojAssemblyReference.cache
